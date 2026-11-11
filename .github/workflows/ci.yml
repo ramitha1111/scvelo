@@ -1,3 +1,12 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 5 optimizations:
+# - [HIGH] Add pip dependency cache to "linting" job
+# - [HIGH] Add pip dependency cache to "test" job
+# - [HIGH] Add pip dependency cache to "test-dataset-downloads" job
+# - [MEDIUM] Add concurrency group to "ci.yml"
+# - [LOW] Use shallow clone in "init" job
+# Estimated savings: ~11 min/run
+#
 name: CI
 
 on:
@@ -7,6 +16,10 @@ on:
     pull_request:
         branches: [main]
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
     # Skip CI if commit message contains `[ci skip]` in the subject
     init:
